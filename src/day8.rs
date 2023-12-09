@@ -57,27 +57,13 @@ fn part1(input: &ParsedInput) -> Result<i64, Box<dyn Error>> {
 #[aoc(day8, part2)]
 // This one is a minor bruh moment
 // I've kind of cheated here, because I've seen that someone else is using LCM to solve it.
-// It makes sense to use it to find when the cycles "intersect", but I feel like you would first need to find the cycle
-// which the function doesn't do.
-// Maybe it's a property of the inputs, idk.
+// The inputs have a propery not mentioned in the description.
+// Each start node maps to a distinct end node, and the end node maps to itself.
 fn part2(input: &ParsedInput) -> Result<i64, Box<dyn Error>> {
     let starts = input
         .nodes
         .iter()
         .filter_map(|n| if n.0.ends_with('A') { Some(n.0) } else { None })
-        // .map(|s| {
-        //     let mut cur = s;
-        //     let mut i = input.instructions.iter().cycle();
-        //     while !cur.ends_with('Z') {
-        //         let cur_map = input.nodes.get(cur).expect("Unknown node.");
-        //         match i.next().unwrap() {
-        //             'L' => cur = &cur_map.0,
-        //             'R' => cur = &cur_map.1,
-        //             _ => unreachable!(),
-        //         }
-        //     }
-        //     cur
-        // })
         .collect::<Vec<_>>();
 
     let mut counters = vec![];

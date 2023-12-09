@@ -16,18 +16,18 @@ fn parse(input: &str) -> ParsedInput {
         .collect::<Vec<_>>()
 }
 
-fn parse_history(history: &[i64]) -> i64 {
+fn extrapolate(history: &[i64]) -> i64 {
     if history.iter().all(|n| *n == 0) {
         0
     } else {
         let diffs = history.windows(2).map(|w| w[1] - w[0]).collect::<Vec<_>>();
-        history.last().unwrap() + parse_history(&diffs)
+        history.last().unwrap() + extrapolate(&diffs)
     }
 }
 
 #[aoc(day9, part1)]
 fn part1(input: &ParsedInput) -> Result<i64, Box<dyn Error>> {
-    Ok(input.iter().map(|h| parse_history(h)).sum())
+    Ok(input.iter().map(|h| extrapolate(h)).sum())
 }
 
 #[aoc(day9, part2)]
