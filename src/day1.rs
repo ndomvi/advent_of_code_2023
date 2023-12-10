@@ -9,7 +9,7 @@ fn parse(file: &str) -> Vec<String> {
 fn part1(lines: &[String]) -> i64 {
     let mut result = 0;
     for l in lines {
-        let digits = l.chars().filter(|c| c.is_ascii_digit()).collect::<Vec<_>>();
+        let digits = l.chars().filter(char::is_ascii_digit).collect::<Vec<_>>();
 
         result += (digits
             .first()

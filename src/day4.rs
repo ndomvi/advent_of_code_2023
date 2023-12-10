@@ -13,10 +13,18 @@ fn part1(lines: &[String]) -> i64 {
 
     for line in lines {
         let line = line.split(':').nth(1).unwrap();
-        let scratched: HashSet<&str> =
-            HashSet::from_iter(line.split('|').next().unwrap().split_ascii_whitespace());
-        let winning: HashSet<&str> =
-            HashSet::from_iter(line.split('|').nth(1).unwrap().split_ascii_whitespace());
+        let scratched: HashSet<&str> = line
+            .split('|')
+            .next()
+            .unwrap()
+            .split_ascii_whitespace()
+            .collect();
+        let winning: HashSet<&str> = line
+            .split('|')
+            .nth(1)
+            .unwrap()
+            .split_ascii_whitespace()
+            .collect();
 
         let common = scratched.intersection(&winning).count();
         if common > 0 {
@@ -36,19 +44,16 @@ fn part2(lines: &[String]) -> Result<i64, Box<dyn Error>> {
         let line = line.split(':').nth(1).ok_or("Invalid line.")?;
 
         let mut split = line.split('|');
-        let scratched: HashSet<&str> = HashSet::from_iter(
-            split
-                .next()
-                .ok_or("Invalid line.")?
-                .split_ascii_whitespace(),
-        );
-        let winning: HashSet<&str> = HashSet::from_iter(
-            split
-                .next()
-                .ok_or("Invalid line.")?
-                .split_ascii_whitespace(),
-        );
-
+        let scratched: HashSet<&str> = split
+            .next()
+            .ok_or("Invalid line.")?
+            .split_ascii_whitespace()
+            .collect();
+        let winning: HashSet<&str> = split
+            .next()
+            .ok_or("Invalid line.")?
+            .split_ascii_whitespace()
+            .collect();
         res += copies[id];
         for i in 1..=scratched.intersection(&winning).count() {
             if id + i < copies.len() {

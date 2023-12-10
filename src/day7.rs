@@ -1,4 +1,5 @@
-use std::{cmp::Ordering, collections::HashMap, error::Error};
+use std::cmp::Ordering;
+use std::collections::HashMap;
 
 use aoc_runner_derive::{aoc, aoc_generator};
 
@@ -21,21 +22,21 @@ enum Card {
 }
 
 impl Card {
-    fn new(card_char: char) -> Card {
+    fn new(card_char: char) -> Self {
         match card_char.to_ascii_lowercase() {
-            '2' => Card::Two,
-            '3' => Card::Three,
-            '4' => Card::Four,
-            '5' => Card::Five,
-            '6' => Card::Six,
-            '7' => Card::Seven,
-            '8' => Card::Eight,
-            '9' => Card::Nine,
-            't' => Card::Ten,
-            'j' => Card::Jack,
-            'q' => Card::Queen,
-            'k' => Card::King,
-            'a' => Card::Ace,
+            '2' => Self::Two,
+            '3' => Self::Three,
+            '4' => Self::Four,
+            '5' => Self::Five,
+            '6' => Self::Six,
+            '7' => Self::Seven,
+            '8' => Self::Eight,
+            '9' => Self::Nine,
+            't' => Self::Ten,
+            'j' => Self::Jack,
+            'q' => Self::Queen,
+            'k' => Self::King,
+            'a' => Self::Ace,
             _ => unreachable!("Invalid card!"),
         }
     }
@@ -92,7 +93,7 @@ fn parse(input: &str) -> ParsedInput {
             let cards = l.next().unwrap().chars().map(Card::new).collect::<Vec<_>>();
 
             let mut card_counts = HashMap::new();
-            for c in cards.iter() {
+            for c in &cards {
                 card_counts.entry(c).and_modify(|n| *n += 1).or_insert(1);
             }
 
@@ -129,20 +130,20 @@ fn parse(input: &str) -> ParsedInput {
 }
 
 #[aoc(day7, part1)]
-fn part1(input: &ParsedInput) -> Result<i64, Box<dyn Error>> {
+fn part1(input: &ParsedInput) -> i64 {
     let mut input = input.clone();
     input.sort();
     let mut res = 0;
     for (i, game) in input.iter().enumerate() {
         res += (i + 1) * game.bet as usize;
     }
-    Ok(res as i64)
+    res as i64
 }
 
 #[aoc_generator(day7, part2)]
 fn parse2(input: &str) -> ParsedInput {
     let mut out = parse(input);
-    for g in out.iter_mut() {
+    for g in &mut out {
         let mut jokers = 0;
         g.cards.iter_mut().for_each(|c| {
             if *c == Card::Jack {
@@ -171,10 +172,8 @@ fn parse2(input: &str) -> ParsedInput {
                 Hand::ThreeKind => {
                     if jokers == 3 {
                         jokers = 0;
-                        Hand::FourKind
-                    } else {
-                        Hand::FourKind
                     }
+                    Hand::FourKind
                 }
                 Hand::FullHouse => {
                     if jokers == 3 {
@@ -183,8 +182,7 @@ fn parse2(input: &str) -> ParsedInput {
                         Hand::FourKind
                     }
                 }
-                Hand::FourKind => Hand::FiveKind,
-                Hand::FiveKind => Hand::FiveKind,
+                Hand::FourKind | Hand::FiveKind => Hand::FiveKind,
             };
             jokers -= 1;
         }
@@ -194,14 +192,14 @@ fn parse2(input: &str) -> ParsedInput {
 }
 
 #[aoc(day7, part2)]
-fn part2(input: &ParsedInput) -> Result<i64, Box<dyn Error>> {
+fn part2(input: &ParsedInput) -> i64 {
     let mut input = input.clone();
     input.sort();
     let mut res = 0;
     for (i, game) in input.iter().enumerate() {
         res += (i + 1) * game.bet as usize;
     }
-    Ok(res as i64)
+    res as i64
 }
 
 #[cfg(test)]
@@ -229,12 +227,12 @@ AAAAA 61
 JJJJ2 41"#;
     #[test]
     fn part1_example_r() {
-        assert_eq!(part1(&parse(TESTCASE_R)).unwrap(), 6592);
+        assert_eq!(part1(&parse(TESTCASE_R)), 6592);
     }
 
     #[test]
     fn part2_example_r() {
-        assert_eq!(part2(&parse2(TESTCASE_R)).unwrap(), 6839);
+        assert_eq!(part2(&parse2(TESTCASE_R)), 6839);
     }
 
     const TESTCASE: &str = r#"32T3K 765
@@ -244,7 +242,7 @@ KTJJT 220
 QQQJA 483"#;
     #[test]
     fn part1_example() {
-        assert_eq!(part1(&parse(TESTCASE)).unwrap(), 6440);
+        assert_eq!(part1(&parse(TESTCASE)), 6440);
     }
 
     // #[test]

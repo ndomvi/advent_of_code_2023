@@ -38,7 +38,7 @@ fn parse(input: &str) -> MapStruct {
 }
 
 #[aoc(day5, part1)]
-fn part1((seeds, maps): &MapStruct) -> Result<i64, Box<dyn std::error::Error>> {
+fn part1((seeds, maps): &MapStruct) -> i64 {
     let mut res = i64::MAX;
 
     for seed in seeds {
@@ -52,7 +52,7 @@ fn part1((seeds, maps): &MapStruct) -> Result<i64, Box<dyn std::error::Error>> {
         res = res.min(seed);
     }
 
-    Ok(res)
+    res
 }
 
 fn map_range(range: Range<i64>, map: &Vec<(Range<i64>, i64, i64)>) -> Vec<Range<i64>> {
@@ -81,7 +81,7 @@ fn map_range(range: Range<i64>, map: &Vec<(Range<i64>, i64, i64)>) -> Vec<Range<
 }
 
 #[aoc(day5, part2)]
-fn part2((seeds, maps): &MapStruct) -> Result<i64, Box<dyn std::error::Error>> {
+fn part2((seeds, maps): &MapStruct) -> i64 {
     let mut seed_ranges = seeds
         .chunks(2)
         .map(|seed| seed[0]..(seed[0] + seed[1]))
@@ -93,9 +93,9 @@ fn part2((seeds, maps): &MapStruct) -> Result<i64, Box<dyn std::error::Error>> {
             .collect::<Vec<_>>();
     }
 
-    Ok(seed_ranges
+    seed_ranges
         .iter()
-        .fold(i64::MAX, |acc, seed| acc.min(seed.start)))
+        .fold(i64::MAX, |acc, seed| acc.min(seed.start))
 }
 
 #[cfg(test)]
@@ -138,11 +138,11 @@ humidity-to-location map:
 
     #[test]
     fn part1_example() {
-        assert_eq!(part1(&parse(TESTCASE)).unwrap(), 35);
+        assert_eq!(part1(&parse(TESTCASE)), 35);
     }
 
     #[test]
     fn part2_example() {
-        assert_eq!(part2(&parse(TESTCASE)).unwrap(), 46);
+        assert_eq!(part2(&parse(TESTCASE)), 46);
     }
 }

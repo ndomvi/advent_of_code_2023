@@ -1,4 +1,4 @@
-use std::{collections::HashMap, error::Error};
+use std::collections::HashMap;
 
 use aoc_runner_derive::{aoc, aoc_generator};
 use num::Integer;
@@ -36,7 +36,7 @@ fn parse(input: &str) -> ParsedInput {
 }
 
 #[aoc(day8, part1)]
-fn part1(input: &ParsedInput) -> Result<i64, Box<dyn Error>> {
+fn part1(input: &ParsedInput) -> i64 {
     let mut cur = "AAA".to_string();
     let mut counter = 0;
     let mut i = input.instructions.iter().cycle();
@@ -51,7 +51,7 @@ fn part1(input: &ParsedInput) -> Result<i64, Box<dyn Error>> {
         counter += 1;
     }
 
-    Ok(counter)
+    counter
 }
 
 #[aoc(day8, part2)]
@@ -59,7 +59,7 @@ fn part1(input: &ParsedInput) -> Result<i64, Box<dyn Error>> {
 // I've kind of cheated here, because I've seen that someone else is using LCM to solve it.
 // The inputs have a propery not mentioned in the description.
 // Each start node maps to a distinct end node, and the end node maps to itself.
-fn part2(input: &ParsedInput) -> Result<i64, Box<dyn Error>> {
+fn part2(input: &ParsedInput) -> i64 {
     let starts = input
         .nodes
         .iter()
@@ -79,12 +79,12 @@ fn part2(input: &ParsedInput) -> Result<i64, Box<dyn Error>> {
                 _ => unreachable!(),
             }
 
-            counter += 1
+            counter += 1;
         }
         counters.push(counter);
     }
 
-    Ok(counters.iter().copied().reduce(|a, b| a.lcm(&b)).unwrap())
+    counters.iter().copied().reduce(|a, b| a.lcm(&b)).unwrap()
 }
 
 #[cfg(test)]
@@ -107,11 +107,11 @@ BBB = (AAA, ZZZ)
 ZZZ = (ZZZ, ZZZ)"#;
     #[test]
     fn part1_example() {
-        assert_eq!(part1(&parse(TESTCASE)).unwrap(), 2);
+        assert_eq!(part1(&parse(TESTCASE)), 2);
     }
     #[test]
     fn part1_example2() {
-        assert_eq!(part1(&parse(TESTCASE2)).unwrap(), 6);
+        assert_eq!(part1(&parse(TESTCASE2)), 6);
     }
 
     const TESTCASE_P2: &str = r#"LR
@@ -126,6 +126,6 @@ ZZZ = (ZZZ, ZZZ)"#;
 XXX = (XXX, XXX)"#;
     #[test]
     fn part2_example() {
-        assert_eq!(part2(&parse(TESTCASE_P2)).unwrap(), 6);
+        assert_eq!(part2(&parse(TESTCASE_P2)), 6);
     }
 }

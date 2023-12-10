@@ -1,5 +1,3 @@
-use std::error::Error;
-
 use aoc_runner_derive::{aoc, aoc_generator};
 
 type ParsedInput = Vec<String>;
@@ -10,7 +8,7 @@ fn parse(input: &str) -> ParsedInput {
 }
 
 #[aoc(day2, part1)]
-fn part1(input: &ParsedInput) -> Result<i64, Box<dyn Error>> {
+fn part1(input: &ParsedInput) -> i64 {
     let mut res = 0;
 
     for (id, l) in input.iter().enumerate() {
@@ -39,11 +37,11 @@ fn part1(input: &ParsedInput) -> Result<i64, Box<dyn Error>> {
         }
     }
 
-    Ok(res as i64)
+    res as i64
 }
 
 #[aoc(day2, part2)]
-fn part2(input: &ParsedInput) -> Result<i64, Box<dyn Error>> {
+fn part2(input: &ParsedInput) -> i64 {
     let mut power = 0;
 
     for l in input {
@@ -67,7 +65,7 @@ fn part2(input: &ParsedInput) -> Result<i64, Box<dyn Error>> {
         power += max_r * max_g * max_b;
     }
 
-    Ok(power as i64)
+    power as i64
 }
 
 #[cfg(test)]
@@ -81,11 +79,11 @@ Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red
 Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green"#;
     #[test]
     fn part1_example() {
-        assert_eq!(part1(&parse(TESTCASE)).unwrap(), 8);
+        assert_eq!(part1(&parse(TESTCASE)), 8);
     }
 
     #[test]
     fn part2_example() {
-        assert_eq!(part2(&parse(TESTCASE)).unwrap(), 2286);
+        assert_eq!(part2(&parse(TESTCASE)), 2286);
     }
 }

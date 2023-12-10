@@ -1,5 +1,3 @@
-use std::error::Error;
-
 use aoc_runner_derive::{aoc, aoc_generator};
 
 type ParsedInput = Vec<Vec<i64>>;
@@ -26,16 +24,16 @@ fn extrapolate(history: &[i64]) -> i64 {
 }
 
 #[aoc(day9, part1)]
-fn part1(input: &ParsedInput) -> Result<i64, Box<dyn Error>> {
-    Ok(input.iter().map(|h| extrapolate(h)).sum())
+fn part1(input: &ParsedInput) -> i64 {
+    input.iter().map(|h| extrapolate(h)).sum()
 }
 
 #[aoc(day9, part2)]
-fn part2(input: &ParsedInput) -> Result<i64, Box<dyn Error>> {
+fn part2(input: &ParsedInput) -> i64 {
     part1(
         &input
             .iter()
-            .map(|h| h.iter().cloned().rev().collect::<Vec<_>>())
+            .map(|h| h.iter().copied().rev().collect::<Vec<_>>())
             .collect::<Vec<_>>(),
     )
 }
@@ -49,11 +47,11 @@ mod tests {
 10 13 16 21 30 45"#;
     #[test]
     fn part1_example() {
-        assert_eq!(part1(&parse(TESTCASE)).unwrap(), 114);
+        assert_eq!(part1(&parse(TESTCASE)), 114);
     }
 
     #[test]
     fn part2_example() {
-        assert_eq!(part2(&parse(TESTCASE)).unwrap(), 2);
+        assert_eq!(part2(&parse(TESTCASE)), 2);
     }
 }

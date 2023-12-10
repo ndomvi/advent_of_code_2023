@@ -1,7 +1,6 @@
-use std::error::Error;
-
 use aoc_runner_derive::{aoc, aoc_generator};
 use regex::Regex;
+
 type ParsedInput = Vec<(i64, i64)>;
 
 #[aoc_generator(day6, part1)]
@@ -20,7 +19,7 @@ fn parse(input: &str) -> ParsedInput {
 }
 
 #[aoc(day6, part1)]
-fn part1(input: &ParsedInput) -> Result<i64, Box<dyn Error>> {
+fn part1(input: &ParsedInput) -> i64 {
     let mut res = 1;
 
     for (time, distance) in input {
@@ -36,7 +35,7 @@ fn part1(input: &ParsedInput) -> Result<i64, Box<dyn Error>> {
         }
     }
 
-    Ok(res)
+    res
 }
 
 // TODO: finish
@@ -89,7 +88,7 @@ fn parse_2(input: &str) -> (i64, i64) {
 }
 
 #[aoc(day6, part2)]
-fn part2((time, distance): &(i64, i64)) -> Result<i64, Box<dyn Error>> {
+fn part2((time, distance): &(i64, i64)) -> i64 {
     let mut variants = 0;
     for i in 0..*time {
         if i * (time - i) > *distance {
@@ -97,11 +96,11 @@ fn part2((time, distance): &(i64, i64)) -> Result<i64, Box<dyn Error>> {
         }
     }
 
-    Ok(variants)
+    variants
 }
 
 #[aoc(day6, part2, quadratic)]
-fn part2_quadratic((time, distance): &(i64, i64)) -> Result<i64, Box<dyn Error>> {
+fn part2_quadratic((time, distance): &(i64, i64)) -> i64 {
     // The solutions are defined by a parabola
     // -x^2+time*x>distance
     // -x^2+time*x-distance>0
@@ -111,7 +110,7 @@ fn part2_quadratic((time, distance): &(i64, i64)) -> Result<i64, Box<dyn Error>>
     let distance = *distance as f64;
 
     let d_sqrt = (time.powi(2) - 4.0 * distance).sqrt();
-    Ok((((-time - d_sqrt) / -2.0) - ((-time + d_sqrt) / -2.0)) as i64)
+    (((-time - d_sqrt) / -2.0) - ((-time + d_sqrt) / -2.0)) as i64
 }
 
 #[cfg(test)]
@@ -122,7 +121,7 @@ mod tests {
     Distance:  9  40  200"#;
     #[test]
     fn part1_example() {
-        assert_eq!(part1(&parse(TESTCASE)).unwrap(), 288);
+        assert_eq!(part1(&parse(TESTCASE)), 288);
     }
 
     // #[test]
@@ -132,11 +131,11 @@ mod tests {
 
     #[test]
     fn part2_example() {
-        assert_eq!(part2(&parse_2(TESTCASE)).unwrap(), 71503);
+        assert_eq!(part2(&parse_2(TESTCASE)), 71503);
     }
 
     #[test]
     fn part2_quadratic_example() {
-        assert_eq!(part2_quadratic(&parse_2(TESTCASE)).unwrap(), 71503);
+        assert_eq!(part2_quadratic(&parse_2(TESTCASE)), 71503);
     }
 }

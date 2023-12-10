@@ -85,12 +85,12 @@ fn part2(input: &ParsedInput) -> Result<i64, Box<dyn Error>> {
             } else {
                 if !cur.is_empty() {
                     let num = cur.parse::<i32>()?;
-                    adj_gears.iter().for_each(|g| {
+                    for g in &adj_gears {
                         gears
                             .entry(*g)
                             .and_modify(|i| i.push(num))
-                            .or_insert(vec![num]);
-                    });
+                            .or_insert_with(|| vec![num]);
+                    }
                 }
                 cur.clear();
                 adj_gears.clear();
@@ -99,12 +99,12 @@ fn part2(input: &ParsedInput) -> Result<i64, Box<dyn Error>> {
 
         if !cur.is_empty() {
             let num = cur.parse::<i32>()?;
-            adj_gears.iter().for_each(|g| {
+            for g in &adj_gears {
                 gears
                     .entry(*g)
                     .and_modify(|i| i.push(num))
-                    .or_insert(vec![num]);
-            });
+                    .or_insert_with(|| vec![num]);
+            }
         }
     }
 
