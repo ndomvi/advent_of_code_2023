@@ -2,17 +2,16 @@ use aoc_runner_derive::{aoc, aoc_generator};
 
 #[derive(Debug, Clone, Copy)]
 struct Galaxy {
-    x: i64,
-    y: i64,
+    x: u64,
+    y: u64,
 }
 
 type ParsedInput = Vec<Galaxy>;
 
 #[aoc_generator(day11)]
 fn parse(input: &str) -> ParsedInput {
-    let lines = input.lines().collect::<Vec<_>>();
-    lines
-        .iter()
+    input
+        .lines()
         .enumerate()
         .flat_map(|(y, l)| {
             l.chars()
@@ -20,8 +19,8 @@ fn parse(input: &str) -> ParsedInput {
                 .filter_map(|(x, c)| {
                     if c == '#' {
                         Some(Galaxy {
-                            x: x as i64,
-                            y: y as i64,
+                            x: x as u64,
+                            y: y as u64,
                         })
                     } else {
                         None
@@ -33,17 +32,18 @@ fn parse(input: &str) -> ParsedInput {
 }
 
 #[aoc(day11, part1)]
-fn part1(input: &ParsedInput) -> i64 {
+fn part1(input: &ParsedInput) -> u64 {
     solve(input, 2)
 }
 
 #[aoc(day11, part2)]
-fn part2(input: &ParsedInput) -> i64 {
+fn part2(input: &ParsedInput) -> u64 {
     solve(input, 1_000_000)
 }
 
-fn solve(galaxies: &ParsedInput, factor: i64) -> i64 {
-    let mut galaxies: Vec<Galaxy> = galaxies.clone();
+fn solve(galaxies: &ParsedInput, factor: u64) -> u64 {
+    assert!(factor > 0);
+    let mut galaxies = galaxies.clone();
     let mut occupied_rows = vec![];
     let mut occupied_cols = vec![];
 
@@ -60,24 +60,21 @@ fn solve(galaxies: &ParsedInput, factor: i64) -> i64 {
     // occupied_* vecs will always return Ok(), as they always contain the requested value
     for g in &mut galaxies {
         if let Ok(dy) = occupied_rows.binary_search(&g.y) {
-            g.y += (g.y - dy as i64) * (factor - 1);
+            g.y += (g.y - dy as u64) * (factor - 1);
         }
         if let Ok(dx) = occupied_cols.binary_search(&g.x) {
-            g.x += (g.x - dx as i64) * (factor - 1);
+            g.x += (g.x - dx as u64) * (factor - 1);
         }
     }
 
     let mut res = 0;
     for (i, g_a) in galaxies.iter().enumerate() {
-        // I was using i..galaxies.len() here (and indexing), but this seems a bit cleaner
-        // Not sure about performace though, I assume skipping i elements on every iteration
-        // could be expensive.
-        for g_b in galaxies.iter().skip(i) {
+        for g_b in &galaxies[i..] {
             res += g_a.x.abs_diff(g_b.x) + g_a.y.abs_diff(g_b.y);
         }
     }
 
-    res as i64
+    res
 }
 
 #[cfg(test)]
