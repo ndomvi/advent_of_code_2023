@@ -222,9 +222,10 @@ fn part2((start, map): &ParsedInput) -> usize {
         .difference(
             &visited
                 .iter()
-                .copied()
                 .filter_map(|(x, y)| {
-                    if x % 2 == 0 && y % 2 == 0 && upscaled[y as usize][x as usize] == Pipe::Ground
+                    if x % 2 == 0
+                        && y % 2 == 0
+                        && upscaled[*y as usize][*x as usize] == Pipe::Ground
                     {
                         Some((x / 2, y / 2))
                     } else {
