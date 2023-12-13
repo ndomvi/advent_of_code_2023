@@ -1,6 +1,7 @@
 use aoc_runner_derive::{aoc, aoc_generator};
+use smallvec::SmallVec;
 
-type ParsedInput = Vec<Vec<Vec<char>>>;
+type ParsedInput = Vec<SmallVec<[SmallVec<[char; 32]>; 32]>>;
 
 #[aoc_generator(day13)]
 fn parse(input: &str) -> ParsedInput {
@@ -10,7 +11,7 @@ fn parse(input: &str) -> ParsedInput {
         .collect::<_>()
 }
 
-fn find_reflection(pat: &[Vec<char>]) -> usize {
+fn find_reflection(pat: &[SmallVec<[char; 32]>]) -> usize {
     for mid in 1..(pat.first().unwrap().len()) {
         if pat.iter().all(|l| {
             let (a, b) = l.split_at(mid);
@@ -29,9 +30,9 @@ fn part1(input: &ParsedInput) -> i64 {
     for pat in input {
         res += match find_reflection(pat) as i64 {
             0 => {
-                let mut rotated = vec![];
+                let mut rotated: SmallVec<[SmallVec<[char; 32]>; 32]> = SmallVec::new();
                 for i in 0..pat.first().unwrap().len() {
-                    rotated.push(pat.iter().map(|l| l[i]).collect::<Vec<_>>());
+                    rotated.push(pat.iter().map(|l| l[i]).collect::<SmallVec<_>>());
                 }
 
                 find_reflection(&rotated) as i64 * 100
@@ -75,9 +76,9 @@ fn part2(input: &ParsedInput) -> i64 {
                 }
             }
 
-            let mut pat_sm_rot = vec![];
+            let mut pat_sm_rot: SmallVec<[SmallVec<[char; 32]>; 32]> = SmallVec::new();
             for i in 0..pat_sm.first().unwrap().len() {
-                pat_sm_rot.push(pat_sm.iter().map(|l| l[i]).collect::<Vec<_>>());
+                pat_sm_rot.push(pat_sm.iter().map(|l| l[i]).collect::<SmallVec<_>>());
             }
             for mid in 1..(pat_sm_rot.first().unwrap().len()) {
                 if pat_sm_rot.iter().all(|l| {
