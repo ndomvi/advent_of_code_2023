@@ -21,7 +21,7 @@ fn parse(input: &str) -> ParsedInput {
         .collect::<Vec<_>>()
 }
 
-// #[aoc(day12, part1, regex)]
+#[aoc(day12, part1, regex)]
 fn part1(input: &ParsedInput) -> i64 {
     let mut variants = 0;
     for (line, nums) in input {
