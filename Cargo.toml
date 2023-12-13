@@ -11,7 +11,19 @@ aoc-runner-derive = "0.3.0"
 
 regex = "1.10.2"
 num = "0.4.1"
+cached = "0.46.1"
 
 [profile.release]
 lto = true
 codegen-units = 1
+
+#[lints.clippy]
+#nursery = "warn"
+#pedantic = "warn"
+#restriction = "warn"
+#
+#implicit_return = "allow"
+#missing_docs = "allow"
+#missing_docs_in_private_items = "allow"
+#shadow_reuse = "allow"
+#std_instead_of_core = "allow"
