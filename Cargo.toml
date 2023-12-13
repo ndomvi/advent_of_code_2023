@@ -13,6 +13,10 @@ regex = "1.10.2"
 num = "0.4.1"
 cached = "0.46.1"
 
+[dependencies.smallvec]
+version = "1.11.2"
+features = ["union"]
+
 [profile.release]
 lto = true
 codegen-units = 1

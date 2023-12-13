@@ -1,6 +1,7 @@
 use aoc_runner_derive::{aoc, aoc_generator};
 use cached::proc_macro::cached;
 use regex::bytes::Regex;
+use smallvec::SmallVec;
 
 type ParsedInput = Vec<(String, Vec<u16>)>;
 
@@ -20,7 +21,7 @@ fn parse(input: &str) -> ParsedInput {
         .collect::<Vec<_>>()
 }
 
-#[aoc(day12, part1, regex)]
+// #[aoc(day12, part1, regex)]
 fn part1(input: &ParsedInput) -> i64 {
     let mut variants = 0;
     for (line, nums) in input {
@@ -62,11 +63,16 @@ fn part1(input: &ParsedInput) -> i64 {
     variants
 }
 
-#[aoc(day12, part1, recursive)]
+#[aoc(day12, part1)]
 fn part1_recursive(input: &ParsedInput) -> i64 {
     input
         .iter()
-        .map(|(springs, groups)| solve(springs.clone().chars().collect::<Vec<_>>(), groups.clone()))
+        .map(|(springs, groups)| {
+            solve(
+                springs.clone().chars().collect::<SmallVec<_>>(),
+                groups.clone().into(),
+            )
+        })
         .sum()
 }
 
@@ -87,7 +93,7 @@ fn part2(input: &ParsedInput) -> i64 {
 }
 
 #[cached]
-fn solve(mut springs: Vec<char>, mut groups: Vec<u16>) -> i64 {
+fn solve(mut springs: SmallVec<[char; 64]>, mut groups: SmallVec<[u16; 8]>) -> i64 {
     // Groups are satisfied, no more broken springs
     if groups.is_empty() {
         if springs.iter().all(|c| *c == '.' || *c == '?') {
@@ -104,7 +110,7 @@ fn solve(mut springs: Vec<char>, mut groups: Vec<u16>) -> i64 {
                 return 0;
             }
             let (springs, cur) = springs.split_at(springs.len() - g as usize);
-            let mut springs = springs.to_vec();
+            let mut springs = SmallVec::from(springs);
             if cur.iter().all(|c| *c == '#' || *c == '?') {
                 if let Some('.' | '?') | None = springs.pop() {
                     return res + solve(springs, groups.clone());
@@ -118,7 +124,7 @@ fn solve(mut springs: Vec<char>, mut groups: Vec<u16>) -> i64 {
                 return 0;
             }
             let (springs, cur) = springs.split_at(springs.len() - g as usize);
-            let mut springs = springs.to_vec();
+            let mut springs = SmallVec::from(springs);
             if cur.iter().all(|c| *c == '#' || *c == '?') {
                 if let Some('.' | '?') | None = springs.pop() {
                     return solve(springs, groups.clone());
