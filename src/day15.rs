@@ -47,7 +47,7 @@ fn part2(input: &ParsedInput) -> usize {
         boxes.push(Vec::new());
     }
 
-    let re = Regex::new("([a-zA-Z]+)([=-])([0-9]+)?").unwrap();
+    let re = Regex::new(r"([a-zA-Z]+)([=-])(\d+)?").unwrap();
     for step in input {
         let capture = re.captures(step).unwrap();
         match (
@@ -58,20 +58,21 @@ fn part2(input: &ParsedInput) -> usize {
                 .map(|m| from_utf8(m.as_bytes()).unwrap().parse::<u8>().unwrap()),
         ) {
             (Some(lbl), Some(b'-'), None) => {
-                let bx = boxes.get_mut(hash(lbl) as usize).unwrap();
-                for i in 0..bx.len() {
-                    if bx[i].0 == lbl {
+                let bx = &mut boxes[hash(lbl) as usize];
+                for (i, lens) in bx.iter_mut().enumerate() {
+                    if lens.0 == lbl {
                         bx.remove(i);
                         break;
                     }
                 }
             }
             (Some(lbl), Some(b'='), Some(val)) => {
-                let bx = boxes.get_mut(hash(lbl) as usize).unwrap();
+                let bx = &mut boxes[hash(lbl) as usize];
+
                 let mut found = false;
-                for i in 0..bx.len() {
-                    if bx[i].0 == lbl {
-                        bx.get_mut(i).unwrap().1 = val;
+                for lens in bx.iter_mut() {
+                    if lens.0 == lbl {
+                        lens.1 = val;
                         found = true;
                         break;
                     }
@@ -98,7 +99,7 @@ fn part2(input: &ParsedInput) -> usize {
 mod tests {
     use super::*;
 
-    const TESTCASE: &str = r#"rn=1,cm-,qp=3,cm=2,qp-,pc=4,ot=9,ab=5,pc-,pc=6,ot=7"#;
+    const TESTCASE: &str = "rn=1,cm-,qp=3,cm=2,qp-,pc=4,ot=9,ab=5,pc-,pc=6,ot=7";
     #[test]
     fn part1_example() {
         assert_eq!(part1(&parse(TESTCASE)), 1320);
