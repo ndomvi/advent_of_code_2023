@@ -10,7 +10,7 @@ aoc-runner = "0.3.0"
 aoc-runner-derive = "0.3.0"
 
 regex = "1.10.2"
-num = "0.4.1"
+num-integer = "0.1.45"
 cached = "0.46.1"
 
 [dependencies.smallvec]
@@ -31,3 +31,4 @@ codegen-units = 1
 #missing_docs_in_private_items = "allow"
 #shadow_reuse = "allow"
 #std_instead_of_core = "allow"
+#min_ident_chars = "allow"
